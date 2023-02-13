@@ -4,6 +4,7 @@ import com.isa.medical_equipment.dto.CommonResponseDto;
 import com.isa.medical_equipment.dto.PenaltyResponseDto;
 import com.isa.medical_equipment.dto.ProfileResponseDto;
 import com.isa.medical_equipment.repositories.PenaltyRepository;
+import com.isa.medical_equipment.repositories.TermsRepository;
 import com.isa.medical_equipment.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +19,7 @@ public class ProfileController {
 
     private final UserRepository userRepository;
     private final PenaltyRepository penaltyRepository;
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getProfile(@PathVariable long id) {
         var userOpt =userRepository.findById(id);

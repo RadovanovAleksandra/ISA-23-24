@@ -37,7 +37,7 @@ public class UserDetailsImpl implements UserDetails {
         this.name = name;
         this.surname = lastName;
         this.authorities = authorities;
-        this.username = username;
+        this.username = email;
         this.email = email;
         this.password = password;
     }
@@ -49,7 +49,7 @@ public class UserDetailsImpl implements UserDetails {
 
         return new UserDetailsImpl(
                 user.getId(),
-                user.getUsername(),
+                user.getEmail(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getName(),

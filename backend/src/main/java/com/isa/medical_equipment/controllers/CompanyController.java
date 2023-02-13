@@ -3,8 +3,10 @@ package com.isa.medical_equipment.controllers;
 import com.isa.medical_equipment.dto.CommonResponseDto;
 import com.isa.medical_equipment.dto.CompanyResponseDto;
 import com.isa.medical_equipment.dto.EquipmentResponseDto;
+import com.isa.medical_equipment.dto.TermResponseDto;
 import com.isa.medical_equipment.repositories.CompanyRepository;
 import com.isa.medical_equipment.repositories.EquipmentRepository;
+import com.isa.medical_equipment.repositories.TermsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ public class CompanyController {
 
     private final EquipmentRepository equipmentRepository;
     private final CompanyRepository companyRepository;
+    private final TermsRepository termsRepository;
 
     @GetMapping()
     public ResponseEntity<?> getAllCompanies() {
@@ -36,6 +39,20 @@ public class CompanyController {
 
         var company = companyOpt.get();
         var dtos = equipmentRepository.findByCompany(company).stream().map(x -> new EquipmentResponseDto(x.getId(), x.getName()));
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/{id}/terms")
+    public ResponseEntity<?> getTermsForCompany(@PathVariable long id) {
+        var companyOpt =companyRepository.findById(id);
+        if (companyOpt.isEmpty()){
+            var dto = new CommonResponseDto();
+            dto.setMessage("Company not found");
+            return ResponseEntity.badRequest().body(dto);
+        }
+
+        var company = companyOpt.get();
+        var dtos = termsRepository.findByCompanyAndByCustomer(company, null).stream().map(x -> new TermResponseDto(x.getId(), x.getTimestamp()));
         return ResponseEntity.ok(dtos);
     }
 }
