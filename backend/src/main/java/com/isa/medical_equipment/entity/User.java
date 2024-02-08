@@ -3,6 +3,8 @@ package com.isa.medical_equipment.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -24,4 +26,7 @@ public class User {
     private RoleEnum role;
     @Column(name = "password")
     private String password;
+
+    @ManyToMany(mappedBy = "admins")
+    private Collection<Company> companies = new ArrayList<>();
 }
