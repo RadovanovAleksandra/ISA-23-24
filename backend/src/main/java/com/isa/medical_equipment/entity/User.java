@@ -17,8 +17,6 @@ public class User {
     private String name;
     @Column(name = "lastname")
     private String lastName;
-    @Column(name = "username", unique = true)
-    private String username;
     @Column(name = "email", unique = true)
     private String email;
     @Column(name = "role")
@@ -26,7 +24,16 @@ public class User {
     private RoleEnum role;
     @Column(name = "password")
     private String password;
-
+    @Column(name = "city")
+    private String city;
+    @Column(name = "state")
+    private String state;
+    @Column(name = "phone")
+    private String phone;
+    @Column(name = "profession")
+    private String profession;
+    @Column(name = "verified")
+    private boolean verified;
     @ManyToMany(mappedBy = "admins")
     private Collection<Company> companies = new ArrayList<>();
 }

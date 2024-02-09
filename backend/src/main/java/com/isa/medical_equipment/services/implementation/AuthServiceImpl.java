@@ -52,21 +52,19 @@ public class AuthServiceImpl implements AuthService {
     public ErrorType signup(SignUpRequestDto requestBody,
                                   HttpServletRequest request) {
 
-
-        if (userRepository.existsByUsername(requestBody.getUsername())) {
-            return ErrorType.USERNAME_EXISTS;
-        }
-
         if (userRepository.existsByEmail(requestBody.getEmail())) {
             return ErrorType.EMAIL_EXISTS;
         }
 
         var user = new User();
-        user.setUsername(requestBody.getUsername());
         user.setEmail(requestBody.getEmail());
         user.setPassword(encoder.encode(requestBody.getPassword()));
         user.setName(requestBody.getName());
         user.setLastName(requestBody.getLastName());
+        user.setCity(requestBody.getCity());
+        user.setPhone(requestBody.getPhone());
+        user.setProfession(requestBody.getProfession());
+        user.setState(requestBody.getState());
         user.setRole(RoleEnum.USER);
         userRepository.save(user);
 
