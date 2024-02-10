@@ -35,6 +35,11 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         var userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+        var user = userRepository.findById(userDetails.getId());
+        if (!user.get().isVerified()) {
+            throw new Exception("Login failed");
+        }
+
         String jwt = jwtUtils.generateJwtToken(authentication);
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
 

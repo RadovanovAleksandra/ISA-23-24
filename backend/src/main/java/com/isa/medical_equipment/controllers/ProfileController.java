@@ -1,7 +1,9 @@
 package com.isa.medical_equipment.controllers;
 
 import com.isa.medical_equipment.dto.CommonResponseDto;
+import com.isa.medical_equipment.dto.PenaltyResponseDto;
 import com.isa.medical_equipment.dto.ProfileResponseDto;
+import com.isa.medical_equipment.repositories.PenaltyRepository;
 import com.isa.medical_equipment.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
 
     private final UserRepository userRepository;
+    private final PenaltyRepository penaltyRepository;
     @GetMapping("/{id}")
     public ResponseEntity<?> getProfile(@PathVariable long id) {
         var userOpt =userRepository.findById(id);
@@ -43,6 +46,21 @@ public class ProfileController {
         BeanUtils.copyProperties(request, user);
         userRepository.save(user);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/penalties")
+    public ResponseEntity<?> getPenalties(@PathVariable long id) {
+        var userOpt =userRepository.findById(id);
+        if (userOpt.isEmpty()){
+            var dto = new CommonResponseDto();
+            dto.setMessage("User profile not found");
+            return ResponseEntity.badRequest().body(dto);
+        }
+
+
+        var penalties = penaltyRepository.findByUser(userOpt.get());
+        var dtos = penalties.stream().map(x -> new PenaltyResponseDto(x.getId(), x.getTimestamp()) );
+        return ResponseEntity.ok(dtos);
     }
 
 }
