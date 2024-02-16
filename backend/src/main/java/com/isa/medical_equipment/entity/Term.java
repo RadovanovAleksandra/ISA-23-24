@@ -14,7 +14,12 @@ public class Term {
     @Column(name = "term_id")
     private Long id;
 
-    private LocalDateTime timestamp;
+    private LocalDateTime start;
+    private int durationInMinutes;
+    private boolean irregular;
+    @Column(name = "status")
+    @Enumerated(value = EnumType.STRING)
+    private IrregularTermStatusEnum status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
@@ -23,12 +28,12 @@ public class Term {
     )
     Company company;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(
-            name = "customer_id",
+            name = "reservation_id",
             nullable = true
     )
-    User customer;
+    Reservation reservation;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(

@@ -8,9 +8,11 @@ import java.time.LocalDateTime;
 public class TermResponseDto {
     private long id;
     private LocalDateTime timestamp;
+    private int durationInMinutes;
 
-    public TermResponseDto(long id, LocalDateTime timestamp) {
+    public TermResponseDto(long id, LocalDateTime timestamp,int durationInMinutes) {
         this.id = id;
         this.timestamp = timestamp;
+        this.durationInMinutes = durationInMinutes;
     }
 }

@@ -36,4 +36,14 @@ public class User {
     private boolean verified;
     @ManyToMany(mappedBy = "admins")
     private Collection<Company> companies = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(
+            name = "loyalty_program_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(
+                    name = "FK_USER_LOYALTY_PROGRAM"
+            )
+    )
+    private LoyaltyProgram loyaltyProgram;
 }

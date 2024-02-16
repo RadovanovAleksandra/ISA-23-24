@@ -4,6 +4,7 @@ package com.isa.medical_equipment.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,6 +21,8 @@ public class Company {
     private String city;
     private String address;
     private byte rating;
+    private LocalTime workingHoursStart;
+    private LocalTime workingHoursEnd;
 
     @ManyToMany
     @JoinTable(
