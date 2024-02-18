@@ -30,4 +30,7 @@ public class Reservation {
             )
     )
     private User user;
+
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL)
+    private Term term;
 }
