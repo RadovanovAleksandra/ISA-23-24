@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/company-rate")
+@RequestMapping("/api/company-rates")
 @RestController
 @RequiredArgsConstructor
 public class CompanyRateController {
