@@ -30,6 +30,8 @@ public class User {
     private String state;
     @Column(name = "phone")
     private String phone;
+    @Column(name = "points")
+    private int points;
     @Column(name = "profession")
     private String profession;
     @Column(name = "verified")
