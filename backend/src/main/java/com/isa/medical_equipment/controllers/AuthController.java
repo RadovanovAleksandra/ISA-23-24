@@ -30,8 +30,8 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<CommonResponseDto> register(@RequestBody SignUpRequestDto requestBody,
+    @PostMapping("/signup")
+    public ResponseEntity<CommonResponseDto> signup(@RequestBody SignUpRequestDto requestBody,
                                                HttpServletRequest request) {
 
         var error = authService.signup(requestBody, request);

@@ -42,7 +42,7 @@ public class User {
     @JoinColumn(
             name = "loyalty_program_id",
             referencedColumnName = "id",
-            nullable = false,
+            nullable = true,
             foreignKey = @ForeignKey(
                     name = "FK_USER_LOYALTY_PROGRAM"
             )

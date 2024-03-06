@@ -29,8 +29,8 @@ public class AuthServiceImpl implements AuthService {
 
     public LoginResponseDto login(LoginRequestDto requestBody) throws Exception {
         var authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(requestBody.getUsername(),
-                        requestBody.getUsername()));
+                new UsernamePasswordAuthenticationToken(requestBody.getEmail(),
+                        requestBody.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         var userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -48,7 +48,6 @@ public class AuthServiceImpl implements AuthService {
                 userDetails.getId(),
                 userDetails.getName(),
                 userDetails.getSurname(),
-                userDetails.getUsername(),
                 userDetails.getEmail(),
                 role);
     }
