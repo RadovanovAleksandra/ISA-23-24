@@ -7,7 +7,6 @@ import lombok.Data;
 public class ProfilePutRequestDto {
     private String name;
     private String lastName;
-    private RoleEnum role;
     private String city;
     private String state;
     private String phone;

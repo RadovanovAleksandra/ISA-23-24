@@ -28,6 +28,7 @@ function AppNavbar() {
                         navbarScroll
                     >
                         <Nav.Link as={Link} to="/home">Home</Nav.Link>
+                        {isLoggedIn() && <Nav.Link as={Link} to="/profile">Profile</Nav.Link>}
                         {!isLoggedIn() && <Nav.Link as={Link} to="/login">Login</Nav.Link>}
                         {!isLoggedIn() && <Nav.Link as={Link} to="/signup">Sign Up</Nav.Link>}
                         {isLoggedIn() && <Button onClick={logout} >Logout</Button>}

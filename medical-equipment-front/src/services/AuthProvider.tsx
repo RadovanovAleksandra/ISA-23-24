@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
 import { AuthContextType, User } from '../types/Types';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

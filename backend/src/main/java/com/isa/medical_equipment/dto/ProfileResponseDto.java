@@ -15,4 +15,7 @@ public class ProfileResponseDto {
     private String state;
     private String phone;
     private String profession;
+    private int points;
+    private int penalties;
+    private String loyaltyProgram;
 }

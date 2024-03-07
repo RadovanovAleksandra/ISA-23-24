@@ -1,47 +1,81 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from '../services/AuthProvider';
 
-function SignupPage() {
+function ProfilePage() {
     const [name, setName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState('');
     const [city, setCity] = useState('');
-    const [state, setState] = useState('');
     const [phone, setPhone] = useState('');
+    const [state, setState] = useState('');
     const [profession, setProfession] = useState('');
+    const [points, setPoints] = useState('');
+    const [penalties, setPenalties] = useState('');
+    const [loyaltyProgram, setLoyaltyProgram] = useState('');
     const [serverError, setServerError] = useState('');
     const [responseSuccess, setResponseSuccess] = useState(false);
     const [validated, setValidated] = useState(false);
     const [loading, setLoading] = useState(false);
-  
-    const navigate = useNavigate();
 
+    const authContext = useContext(AuthContext);
+
+    useEffect(() => {
+        if (!authContext?.user?.token) {
+            setLoading(true);
+            return;
+        }
+
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get(process.env.REACT_APP_API_URL + `api/profiles/${authContext?.user?.id}`,
+                 {headers: {Authorization: `Bearer ${authContext?.user?.token}`}});
+                
+                 setName(response.data.name)
+                 setLastName(response.data.lastName)
+                 setCity(response.data.city)
+                 setState(response.data.state)
+                 setPhone(response.data.phone)
+                 setProfession(response.data.profession)
+                 setEmail(response.data.email)
+                 setPoints(response.data.points)
+                 setLoyaltyProgram(response.data.loyaltyProgram)
+                 setPenalties(response.data.penalties)
+                 
+            } catch (error:any) {
+                console.log(error)                
+                setServerError("Failed to load user data");
+            }
+
+            setLoading(false)
+        }
+
+        fetchProfile();
+    }, [authContext?.user?.id, authContext?.user?.token]);
+  
     async function handleSubmit(event:any) {
         event.preventDefault();
         event.stopPropagation();
+      
+        setResponseSuccess(false);
+        setServerError('');
 
         const form = event.currentTarget;  
         setValidated(true);
 
-        if (form.checkValidity() === false || repeatPassword !== password) {
+        if (form.checkValidity() === false) {
             return;
         }
 
         setLoading(true);
 
         try {
-            await axios.post(process.env.REACT_APP_API_URL + 'api/auth/signup', 
-            { email, password, name, lastName, city, phone, profession, state });
+            await axios.put(process.env.REACT_APP_API_URL + `api/profiles/${authContext?.user?.id}`, 
+            { name, lastName, city, phone, profession, state },
+            {headers: {Authorization: `Bearer ${authContext?.user?.token}`}});
             
             setResponseSuccess(true);
-            
-            setTimeout(() => {
-                navigate('/login')
-            }, 500)
         } catch (error:any) {
             console.log(error)
             if (error.response.status === 400)
@@ -58,9 +92,9 @@ function SignupPage() {
             <Container>
               <Row className="justify-content-md-center">
                 <Col md={4}>
-                  <h2 className="mb-4">SignUp</h2>
+                  <h2 className="mb-4">Change profile data</h2>
                   {serverError && <Alert variant="danger">{serverError}</Alert>}
-                  {responseSuccess && <Alert variant="success">Registration successful</Alert>}
+                  {responseSuccess && <Alert variant="success">Profile updated successfully</Alert>}
                   <Form noValidate validated={validated} onSubmit={handleSubmit}>
 
                   <Form.Group controlId="formName">
@@ -97,44 +131,9 @@ function SignupPage() {
                       <Form.Control
                         type="email"
                         required
-                        placeholder="Enter email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        disabled
                       />
-                        <Form.Control.Feedback type="invalid">
-                            Please insert valid email
-                        </Form.Control.Feedback>
-                    </Form.Group>
-        
-                    <Form.Group controlId="formBasicPassword">
-                      <Form.Label>Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        required
-                        minLength={6}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                            Please insert valid password
-                      </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <Form.Group controlId="formRepeatPassword">
-                      <Form.Label>Repeat password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        placeholder="Repeat password"
-                        value={repeatPassword}
-                        required
-                        isInvalid={repeatPassword !== password || repeatPassword.length === 0}
-                        isValid={repeatPassword === password && repeatPassword.length !== 0}
-                        onChange={(e) => setRepeatPassword(e.target.value)}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                            Please insert matching password
-                      </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group controlId="formCity">
@@ -207,8 +206,13 @@ function SignupPage() {
                     </Spinner>
                 </Row>
                 </Container>}
+                <Container>
+                <Row>Number of points: {points}</Row>
+                <Row>Number of penalties: {penalties}</Row>
+                <Row>Loyalty program: {loyaltyProgram ? loyaltyProgram : 'No enrolled loyalty program yet'}</Row>
+                </Container>
             </Container>                
     )
   }
   
-  export default SignupPage;
+  export default ProfilePage;
