@@ -7,12 +7,14 @@ import LoginPage from './pages/LoginPage';
 import AppNavbar from './components/AppNavbar';
 import SignupPage from './pages/SignUpPage';
 import ProfilePage from './pages/ProfilePage';
+import CompaniesListPage from './pages/CompaniesListPage';
 
 function App() {
   return (
       <>
       <AppNavbar />
         <Routes>
+          <Route path="/companies" element={<CompaniesListPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
