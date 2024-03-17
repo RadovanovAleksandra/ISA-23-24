@@ -114,7 +114,7 @@ public class ComplaintController {
 
 
     @GetMapping(value = "/for-user")
-    public ResponseEntity<Collection<ComplaintResponseDto>> getEmployees() {
+    public ResponseEntity<Collection<ComplaintResponseDto>> getComplaintsForUser() {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
         var user = userRepository.findById(authUser.getId());
@@ -129,6 +129,29 @@ public class ComplaintController {
             dto.setTimestamp(complaint.getTimestamp());
             dto.setCompanyAdminName(complaint.getCompanyAdmin() != null ? complaint.getCompanyAdmin().getName() : null);
             dto.setCompanyName(complaint.getCompany() != null ? complaint.getCompany().getName() : null);
+
+            dtos.add(dto);
+        }
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping(value = "/for-admin")
+    public ResponseEntity<Collection<ComplaintResponseDto>> getComplaintsForAdmin() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
+        var user = userRepository.findById(authUser.getId());
+
+        var complaints = complaintRepository.findByAnswer(null);
+        var dtos = new ArrayList<ComplaintResponseDto>();
+        for (var complaint : complaints) {
+            var dto = new ComplaintResponseDto();
+            dto.setText(complaint.getText());
+            dto.setId(complaint.getId());
+            dto.setAnswer(complaint.getAnswer());
+            dto.setTimestamp(complaint.getTimestamp());
+            dto.setCompanyAdminName(complaint.getCompanyAdmin() != null ? complaint.getCompanyAdmin().getName() : null);
+            dto.setCompanyName(complaint.getCompany() != null ? complaint.getCompany().getName() : null);
+            dto.setUserName(complaint.getCustomer().getName() + " " + complaint.getCustomer().getLastName());
 
             dtos.add(dto);
         }

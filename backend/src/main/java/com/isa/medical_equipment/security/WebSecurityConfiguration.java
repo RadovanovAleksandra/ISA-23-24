@@ -57,6 +57,7 @@ public class WebSecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers("/api/auth/signup").permitAll()
                 .antMatchers("/api/auth/signup").permitAll()
+                //.antMatchers("/api/complaints/for-admin").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/companies").permitAll()
                 .anyRequest().authenticated();
 

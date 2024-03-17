@@ -11,6 +11,10 @@ function AppNavbar() {
         return authContext?.user!!;
     }
 
+    function isAdmin() {
+        return authContext?.user?.role && authContext?.user?.role === 'ADMIN';
+    }
+
     function logout() {
         authContext?.logout();
     }
@@ -30,6 +34,8 @@ function AppNavbar() {
                         <Nav.Link as={Link} to="/home">Home</Nav.Link>
                         <Nav.Link as={Link} to="/companies">Companies</Nav.Link>
                         {isLoggedIn() && <Nav.Link as={Link} to="/profile">Profile</Nav.Link>}
+                        {isAdmin() && <Nav.Link as={Link} to="/admin/complaint">Complaints</Nav.Link>}
+                        {isLoggedIn() && <Nav.Link as={Link} to="/complaint">Complaint</Nav.Link>}
                         {!isLoggedIn() && <Nav.Link as={Link} to="/login">Login</Nav.Link>}
                         {!isLoggedIn() && <Nav.Link as={Link} to="/signup">Sign Up</Nav.Link>}
                         {isLoggedIn() && <Button onClick={logout} >Logout</Button>}

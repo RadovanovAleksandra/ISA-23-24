@@ -24,7 +24,7 @@ function CompaniesListPage() {
     fetchCompanies();
   }, []);
  
-  const filteredCompanies = companies.filter(company =>
+  const filteredCompanies = companies.filter((company:any) =>
     company.name.toLowerCase().includes(filter.toLowerCase()) || 
     company.address.toLowerCase().includes(filter.toLowerCase()) ||
     company.city.toLowerCase().includes(filter.toLowerCase())
@@ -40,7 +40,7 @@ function CompaniesListPage() {
     return 0;
   });
 
-  const requestSort = key => {
+  const requestSort = (key:any) => {
     let direction = 'ascending';
     if (
       sortConfig.key === key &&
@@ -96,7 +96,7 @@ function CompaniesListPage() {
                 </tr>
                 </thead>
                 <tbody>
-                {sortedComanies.map(company => (
+                {sortedComanies.map((company:any) => (
                     <tr key={company.id}>
                     <td>{company.name}</td>
                     <td>{company.city}</td>

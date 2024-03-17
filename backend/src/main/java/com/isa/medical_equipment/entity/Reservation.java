@@ -31,6 +31,6 @@ public class Reservation {
     )
     private User user;
 
-    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Term term;
 }

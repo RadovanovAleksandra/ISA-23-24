@@ -1,14 +1,12 @@
 package com.isa.medical_equipment.controllers;
 
-import com.isa.medical_equipment.dto.CommonResponseDto;
-import com.isa.medical_equipment.dto.CompanyResponseDto;
-import com.isa.medical_equipment.dto.EquipmentResponseDto;
-import com.isa.medical_equipment.dto.TermResponseDto;
-import com.isa.medical_equipment.repositories.CompanyRepository;
-import com.isa.medical_equipment.repositories.EquipmentRepository;
-import com.isa.medical_equipment.repositories.TermsRepository;
+import com.isa.medical_equipment.dto.*;
+import com.isa.medical_equipment.repositories.*;
+import com.isa.medical_equipment.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -22,6 +20,8 @@ public class CompanyController {
     private final EquipmentRepository equipmentRepository;
     private final CompanyRepository companyRepository;
     private final TermsRepository termsRepository;
+    private final UserRepository userRepository;
+    private final ReservationRepository reservationRepository;
 
     @GetMapping()
     public ResponseEntity<?> getAllCompanies() {
@@ -53,6 +53,22 @@ public class CompanyController {
 
         var company = companyOpt.get();
         var dtos = termsRepository.findByCompanyAndReservation(company, null).stream().map(x -> new TermResponseDto(x.getId(), x.getStart(), x.getDurationInMinutes()));
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/for-user")
+    public ResponseEntity<?> getCompaniesWhichUserCanRate() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
+        var user = userRepository.findById(authUser.getId()).get();
+
+        var reservations = reservationRepository.findByUser(user);
+        var companies = reservations.stream()
+                .map(reservation -> reservation.getTerm().getCompany())
+                .distinct()
+                .toList();
+
+        var dtos = companies.stream().map(x -> new CompanyForRateResponseDto(x.getId(), x.getName()));
         return ResponseEntity.ok(dtos);
     }
 }

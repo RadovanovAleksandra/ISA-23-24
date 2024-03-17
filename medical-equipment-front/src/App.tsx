@@ -8,12 +8,16 @@ import AppNavbar from './components/AppNavbar';
 import SignupPage from './pages/SignUpPage';
 import ProfilePage from './pages/ProfilePage';
 import CompaniesListPage from './pages/CompaniesListPage';
+import ComplaintPage from './pages/ComplaintPage';
+import AdminComplaintPage from './pages/admin/AdminComplaintPage';
 
 function App() {
   return (
       <>
       <AppNavbar />
         <Routes>
+          <Route path="/admin/complaint" element={<AdminComplaintPage />} />
+          <Route path="/complaint" element={<ComplaintPage />} />
           <Route path="/companies" element={<CompaniesListPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/login" element={<LoginPage />} />

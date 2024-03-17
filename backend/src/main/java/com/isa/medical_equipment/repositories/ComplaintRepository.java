@@ -10,4 +10,5 @@ import java.util.Collection;
 @Repository
 public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
     Collection<Complaint> findByCustomer(User customer);
+    Collection<Complaint> findByAnswer(String answer);
 }
