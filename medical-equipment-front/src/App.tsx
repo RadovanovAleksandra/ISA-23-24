@@ -10,6 +10,7 @@ import ProfilePage from './pages/ProfilePage';
 import CompaniesListPage from './pages/CompaniesListPage';
 import ComplaintPage from './pages/ComplaintPage';
 import AdminComplaintPage from './pages/admin/AdminComplaintPage';
+import RateCompaniesPage from './pages/RateCompaniesPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/admin/complaint" element={<AdminComplaintPage />} />
           <Route path="/complaint" element={<ComplaintPage />} />
+          <Route path="/companies/rate" element={<RateCompaniesPage />} />
           <Route path="/companies" element={<CompaniesListPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/login" element={<LoginPage />} />

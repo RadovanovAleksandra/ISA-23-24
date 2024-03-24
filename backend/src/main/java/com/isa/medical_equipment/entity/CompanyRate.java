@@ -13,6 +13,7 @@ public class CompanyRate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private byte rate;
+    private String comment;
     private LocalDateTime timestamp;
 
     @ManyToOne

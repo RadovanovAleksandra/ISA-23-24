@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class CompanyRateRequestDto {
     private long companyId;
+    private String comment;
     private byte rate;
 }

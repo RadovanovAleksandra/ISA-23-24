@@ -53,6 +53,7 @@ public class CompanyRateController {
         if (companyRateOpt.isEmpty()) {
             var newRate = new CompanyRate();
             newRate.setCompany(company);
+            newRate.setComment(request.getComment());
             newRate.setRate(request.getRate());
             newRate.setUser(user);
             newRate.setTimestamp(LocalDateTime.now());
@@ -60,6 +61,7 @@ public class CompanyRateController {
         } else {
             var rate = companyRateOpt.get();
             rate.setRate(request.getRate());
+            rate.setComment(request.getComment());
             rate.setTimestamp(LocalDateTime.now());
             companyRateRepository.save(rate);
         }
