@@ -11,12 +11,14 @@ import CompaniesListPage from './pages/CompaniesListPage';
 import ComplaintPage from './pages/ComplaintPage';
 import AdminComplaintPage from './pages/admin/AdminComplaintPage';
 import RateCompaniesPage from './pages/RateCompaniesPage';
+import LoyaltyProgramAdminPage from './pages/admin/LoyaltyProgramAdminPage';
 
 function App() {
   return (
       <>
       <AppNavbar />
         <Routes>
+          <Route path="/admin/loyalty-programs" element={<LoyaltyProgramAdminPage />} />
           <Route path="/admin/complaint" element={<AdminComplaintPage />} />
           <Route path="/complaint" element={<ComplaintPage />} />
           <Route path="/companies/rate" element={<RateCompaniesPage />} />

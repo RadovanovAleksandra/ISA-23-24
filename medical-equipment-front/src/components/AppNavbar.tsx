@@ -36,6 +36,7 @@ function AppNavbar() {
                         {isLoggedIn() && <Nav.Link as={Link} to="/profile">Profile</Nav.Link>}
                         {isLoggedIn() && <Nav.Link as={Link} to="/companies/rate">Rate companies</Nav.Link>}
                         {isAdmin() && <Nav.Link as={Link} to="/admin/complaint">Complaints</Nav.Link>}
+                        {isAdmin() && <Nav.Link as={Link} to="/admin/loyalty-programs">Loyalty programs</Nav.Link>}
                         {isLoggedIn() && <Nav.Link as={Link} to="/complaint">Complaint</Nav.Link>}
                         {!isLoggedIn() && <Nav.Link as={Link} to="/login">Login</Nav.Link>}
                         {!isLoggedIn() && <Nav.Link as={Link} to="/signup">Sign Up</Nav.Link>}

@@ -10,6 +10,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/loyalty-programs")
 @RestController
@@ -17,6 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class LoyaltyProgramController {
 
     private final LoyaltyProgramRepository loyaltyProgramRepository;
+
+    @GetMapping
+    public ResponseEntity<Collection<LoyaltyProgram>> findAll() {
+        return ResponseEntity.ok(loyaltyProgramRepository.findAll());
+    }
     @PostMapping
     public ResponseEntity<?> createProgram(@RequestBody LoyaltyProgramCreateRequestDto request) {
         var number = loyaltyProgramRepository.countByName(request.getName());

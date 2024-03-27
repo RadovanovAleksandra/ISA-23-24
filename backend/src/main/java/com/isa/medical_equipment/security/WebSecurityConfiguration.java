@@ -56,8 +56,9 @@ public class WebSecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/api/auth/signup").permitAll()
-                .antMatchers("/api/auth/signup").permitAll()
+                .antMatchers("/api/auth/login").permitAll()
                 //.antMatchers("/api/complaints/for-admin").hasRole("ADMIN")
+                //.antMatchers("/api/loyalty-programs/*").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/companies").permitAll()
                 .anyRequest().authenticated();
 
