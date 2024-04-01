@@ -12,12 +12,16 @@ import ComplaintPage from './pages/ComplaintPage';
 import AdminComplaintPage from './pages/admin/AdminComplaintPage';
 import RateCompaniesPage from './pages/RateCompaniesPage';
 import LoyaltyProgramAdminPage from './pages/admin/LoyaltyProgramAdminPage';
+import SuccessfulReservationsHistory from './pages/SuccessfulReservationsHistory';
+import ScheduledTermsPage from './pages/ScheduledTermsPage';
 
 function App() {
   return (
       <>
       <AppNavbar />
         <Routes>
+          <Route path="/scheduled-terms" element={<ScheduledTermsPage />} />
+          <Route path="/successful-reservations" element={<SuccessfulReservationsHistory />} />
           <Route path="/admin/loyalty-programs" element={<LoyaltyProgramAdminPage />} />
           <Route path="/admin/complaint" element={<AdminComplaintPage />} />
           <Route path="/complaint" element={<ComplaintPage />} />

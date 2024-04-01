@@ -15,6 +15,7 @@ public class Reservation {
     private Long id;
 
     private LocalDateTime timestamp;
+    private int price;
 
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)

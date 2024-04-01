@@ -2,6 +2,7 @@ package com.isa.medical_equipment.controllers;
 
 import com.isa.medical_equipment.dto.CommonResponseDto;
 import com.isa.medical_equipment.dto.ReservationRequestDto;
+import com.isa.medical_equipment.dto.ReservationResponseDto;
 import com.isa.medical_equipment.entity.Reservation;
 import com.isa.medical_equipment.entity.ReservationItem;
 import com.isa.medical_equipment.entity.ReservationStatusEnum;
@@ -9,16 +10,15 @@ import com.isa.medical_equipment.repositories.*;
 import com.isa.medical_equipment.security.UserDetailsImpl;
 import com.isa.medical_equipment.services.interfaces.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/reservations")
@@ -33,8 +33,27 @@ public class ReservationController {
     private final PenaltyRepository penaltyRepository;
     private final EmailService emailService;
 
+    @GetMapping("/successful")
+    public ResponseEntity<?> getListOfSuccessfulReservations() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
+        var user = userRepository.findById(authUser.getId()).get();
+
+        var reservations = reservationRepository.findByUserAndStatus(user, ReservationStatusEnum.ACCEPTED);
+        return ResponseEntity.ok( reservations.stream().map(x -> {
+            var dto = new ReservationResponseDto();
+            dto.setId(x.getId());
+            dto.setDuration(x.getTerm().getDurationInMinutes());
+            dto.setCreatedAt(x.getTimestamp());
+            dto.setCompanyName(x.getTerm().getCompany().getName());
+            dto.setTermStart(x.getTerm().getStart());
+            dto.setPrice(x.getPrice());
+            return dto;
+        }).collect(Collectors.toList()));
+    }
 
     @Transactional
+    @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody ReservationRequestDto request) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();

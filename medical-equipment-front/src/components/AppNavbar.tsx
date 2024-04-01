@@ -33,6 +33,8 @@ function AppNavbar() {
                     >
                         <Nav.Link as={Link} to="/home">Home</Nav.Link>
                         <Nav.Link as={Link} to="/companies">Companies</Nav.Link>
+                        {isLoggedIn() && <Nav.Link as={Link} to="/successful-reservations">Successful reservations</Nav.Link>}
+                        {isLoggedIn() && <Nav.Link as={Link} to="/scheduled-terms">Scheduled terms</Nav.Link>}
                         {isLoggedIn() && <Nav.Link as={Link} to="/profile">Profile</Nav.Link>}
                         {isLoggedIn() && <Nav.Link as={Link} to="/companies/rate">Rate companies</Nav.Link>}
                         {isAdmin() && <Nav.Link as={Link} to="/admin/complaint">Complaints</Nav.Link>}
