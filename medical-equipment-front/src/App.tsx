@@ -14,6 +14,7 @@ import RateCompaniesPage from './pages/RateCompaniesPage';
 import LoyaltyProgramAdminPage from './pages/admin/LoyaltyProgramAdminPage';
 import SuccessfulReservationsHistory from './pages/SuccessfulReservationsHistory';
 import ScheduledTermsPage from './pages/ScheduledTermsPage';
+import SuccessfulReservationsHistoryQrCodes from './pages/SuccessfulReservationsHistoryQrCodes';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <AppNavbar />
         <Routes>
           <Route path="/scheduled-terms" element={<ScheduledTermsPage />} />
+          <Route path="/successful-reservations/qr" element={<SuccessfulReservationsHistoryQrCodes />} />
           <Route path="/successful-reservations" element={<SuccessfulReservationsHistory />} />
           <Route path="/admin/loyalty-programs" element={<LoyaltyProgramAdminPage />} />
           <Route path="/admin/complaint" element={<AdminComplaintPage />} />

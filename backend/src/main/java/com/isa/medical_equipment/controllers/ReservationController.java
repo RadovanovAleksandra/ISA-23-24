@@ -33,6 +33,25 @@ public class ReservationController {
     private final PenaltyRepository penaltyRepository;
     private final EmailService emailService;
 
+    @GetMapping
+    public ResponseEntity<?> getListForUserByStatus(@RequestParam ReservationStatusEnum status) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
+        var user = userRepository.findById(authUser.getId()).get();
+
+        var reservations = reservationRepository.findByUserAndStatus(user, status);
+        return ResponseEntity.ok( reservations.stream().map(x -> {
+            var dto = new ReservationResponseDto();
+            dto.setId(x.getId());
+            dto.setDuration(x.getTerm().getDurationInMinutes());
+            dto.setCreatedAt(x.getTimestamp());
+            dto.setCompanyName(x.getTerm().getCompany().getName());
+            dto.setTermStart(x.getTerm().getStart());
+            dto.setPrice(x.getPrice());
+            return dto;
+        }).collect(Collectors.toList()));
+    }
+
     @GetMapping("/successful")
     public ResponseEntity<?> getListOfSuccessfulReservations() {
         SecurityContext context = SecurityContextHolder.getContext();
