@@ -52,7 +52,7 @@ function SuccessfulReservationsHistoryQrCodes() {
                     </Row>
                 </Container>}
 
-              <h1>Succesful reservations history</h1>
+              <h1>Reservations history</h1>
 
               <Form>
                 <Form.Group controlId="selectCompanyOption">

@@ -25,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendReservationCreatedEmail(Reservation reservation, User user) {
         var emailContext = new ReservationCreatedEmailContext();
         emailContext.init(user);
-        emailContext.setReservation(reservation);
+        emailContext.setData(user.getName());
         try {
 
             QRCodeWriter qrCodeWriter = new QRCodeWriter();

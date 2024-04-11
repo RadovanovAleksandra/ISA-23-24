@@ -6,6 +6,7 @@ import com.isa.medical_equipment.dto.ReservationResponseDto;
 import com.isa.medical_equipment.entity.Reservation;
 import com.isa.medical_equipment.entity.ReservationItem;
 import com.isa.medical_equipment.entity.ReservationStatusEnum;
+import com.isa.medical_equipment.entity.Term;
 import com.isa.medical_equipment.repositories.*;
 import com.isa.medical_equipment.security.UserDetailsImpl;
 import com.isa.medical_equipment.services.interfaces.EmailService;
@@ -31,6 +32,7 @@ public class ReservationController {
     private final ReservationItemRepository reservationItemRepository;
     private final EquipmentRepository equipmentRepository;
     private final PenaltyRepository penaltyRepository;
+    private final CompanyRepository companyRepository;
     private final EmailService emailService;
 
     @GetMapping
@@ -78,6 +80,14 @@ public class ReservationController {
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
         var user = userRepository.findById(authUser.getId()).get();
 
+        var companyOpt = companyRepository.findById(request.getCompanyId());
+        if(companyOpt.isEmpty()) {
+            var dto = new CommonResponseDto();
+            dto.setMessage("Company is not found");
+            return ResponseEntity.badRequest().body(dto);
+        }
+        var company = companyOpt.get();
+
         var penalties = penaltyRepository.findByUser(user);
         if (penalties.size() >= 3) {
             var dto = new CommonResponseDto();
@@ -85,22 +95,63 @@ public class ReservationController {
             return ResponseEntity.badRequest().body(dto);
         }
 
-        var termOpt = termsRepository.findById(request.getTermId());
-        if (termOpt.isEmpty()) {
+        if (request.getTermId() == 0 && request.getCustomTerm() == null) {
             var dto = new CommonResponseDto();
-            dto.setMessage("Term is not found");
+            dto.setMessage("Selecting a term is mandatory");
             return ResponseEntity.badRequest().body(dto);
         }
 
-        var term = termOpt.get();
-        if (term.getReservation() != null) {
+        if (request.getCustomTerm() != null && request.getCustomTerm().isBefore(LocalDateTime.now())) {
             var dto = new CommonResponseDto();
-            dto.setMessage("Term is not found");
+            dto.setMessage("Term has to be in the future");
             return ResponseEntity.badRequest().body(dto);
         }
 
+        if (request.getCustomTerm() != null) {
+            if (request.getCustomTerm().toLocalTime().isBefore(company.getWorkingHoursStart())
+            || request.getCustomTerm().toLocalTime().isAfter(company.getWorkingHoursEnd())) {
+                var dto = new CommonResponseDto();
+                dto.setMessage("Selected term does not fit to company's working hours");
+                return ResponseEntity.badRequest().body(dto);
+            }
+
+            var companyTerms = termsRepository.findByCompany(company);
+            if (companyTerms.stream().anyMatch(x ->
+                    request.getCustomTerm().isAfter(x.getStart()) &&
+                    request.getCustomTerm().isBefore(x.getStart().plusMinutes(x.getDurationInMinutes()))) ) {
+                var dto = new CommonResponseDto();
+                dto.setMessage("Term with the same time range already exists. Check if it is still available");
+                return ResponseEntity.badRequest().body(dto);
+            }
+        }
+
+        Term term;
         var reservation = new Reservation();
-        reservation.setTerm(term);
+        if (request.getCustomTerm() != null) {
+            term = new Term();
+            term.setCompany(company);
+            term.setIrregular(true);
+            term.setStart(request.getCustomTerm());
+            term.setDurationInMinutes(30);
+            term.setAdmin(company.getAdmins().stream().findFirst().get());
+            reservation.setTerm(term);
+        } else {
+            var termOpt = termsRepository.findById(request.getTermId());
+            if (termOpt.isEmpty()) {
+                var dto = new CommonResponseDto();
+                dto.setMessage("Term is not found");
+                return ResponseEntity.badRequest().body(dto);
+            }
+
+            term = termOpt.get();
+            if (term.getReservation() != null) {
+                var dto = new CommonResponseDto();
+                dto.setMessage("Term is already booked");
+                return ResponseEntity.badRequest().body(dto);
+            }
+            reservation.setTerm(term);
+        }
+
         reservation.setUser(user);
         reservation.setTimestamp(LocalDateTime.now());
         reservation.setStatus(ReservationStatusEnum.PENDING);
@@ -119,6 +170,9 @@ public class ReservationController {
             reservationItem.setEquipment(equipment.get());
             reservationItemRepository.save(reservationItem);
         }
+
+        term.setReservation(reservation);
+        termsRepository.save(term);
 
         emailService.sendReservationCreatedEmail(reservation, user);
 

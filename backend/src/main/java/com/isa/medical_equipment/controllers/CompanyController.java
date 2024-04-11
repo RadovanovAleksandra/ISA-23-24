@@ -38,7 +38,7 @@ public class CompanyController {
         }
 
         var company = companyOpt.get();
-        var dtos = equipmentRepository.findByCompany(company).stream().map(x -> new EquipmentResponseDto(x.getId(), x.getName()));
+        var dtos = equipmentRepository.findByCompany(company).stream().map(x -> new EquipmentResponseDto(x.getId(), x.getName(), x.getAvailableQuantity()));
         return ResponseEntity.ok(dtos);
     }
 

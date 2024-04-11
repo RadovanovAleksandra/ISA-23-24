@@ -14,6 +14,7 @@ public class Equipment {
     private Long id;
 
     private String name;
+    private int availableQuantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(

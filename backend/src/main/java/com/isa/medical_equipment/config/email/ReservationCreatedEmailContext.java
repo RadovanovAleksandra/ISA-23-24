@@ -15,11 +15,7 @@ public class ReservationCreatedEmailContext extends AbstractEmailContext {
     }
 
 
-    public void setReservation(Reservation reservation) {
-//        put("start", appointment.getStart().format(DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm")));
-//        put("streetName", appointment.getCenter().getAddress().getStreetName());
-//        put("streetNumber", appointment.getCenter().getAddress().getStreetNumber());
-//        put("city", appointment.getCenter().getAddress().getCity());
-//        put("state", appointment.getCenter().getAddress().getState());
+    public void setData(String user) {
+        put("userName", user);
     }
 }

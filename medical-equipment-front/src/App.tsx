@@ -15,6 +15,7 @@ import LoyaltyProgramAdminPage from './pages/admin/LoyaltyProgramAdminPage';
 import SuccessfulReservationsHistory from './pages/SuccessfulReservationsHistory';
 import ScheduledTermsPage from './pages/ScheduledTermsPage';
 import SuccessfulReservationsHistoryQrCodes from './pages/SuccessfulReservationsHistoryQrCodes';
+import CompanyCatalogPage from './pages/CompanyCatalogPage';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/admin/complaint" element={<AdminComplaintPage />} />
           <Route path="/complaint" element={<ComplaintPage />} />
           <Route path="/companies/rate" element={<RateCompaniesPage />} />
+          <Route path="/companies/:id/catalog" element={<CompanyCatalogPage />} />
           <Route path="/companies" element={<CompaniesListPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/login" element={<LoginPage />} />

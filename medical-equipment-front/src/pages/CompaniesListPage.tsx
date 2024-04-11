@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Table, InputGroup, FormControl, Container, Row, Spinner } from 'react-bootstrap';
+import { Table, InputGroup, FormControl, Container, Row, Spinner, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function CompaniesListPage() {
   const [companies, setCompanies] = useState([]);
@@ -93,6 +94,7 @@ function CompaniesListPage() {
                     <th onClick={() => requestSort('wokringHoursEnd')}>
                     Working hours end {sortConfig.key === 'wokringHoursEnd' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : null}
                     </th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -104,6 +106,7 @@ function CompaniesListPage() {
                     <td>{company.rating}</td>
                     <td>{company.workingHoursStart}</td>
                     <td>{company.workingHoursEnd}</td>
+                    <td><Link className='btn btn-warning' to={`/companies/${company.id}/catalog`}>See catalog</Link></td>
                     </tr>
                 ))}
                 </tbody>
