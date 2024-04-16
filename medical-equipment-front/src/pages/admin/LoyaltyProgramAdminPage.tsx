@@ -55,11 +55,11 @@ function LoyaltyProgramAdminPage() {
     setShowDeleteModal(true);
   }
 
-  async function handleModalSubmit(name: string, discountRate: number, minNumberOfPoints: number, newPoints: number) {
+  async function handleModalSubmit(name: string, discountRate: number, minNumberOfPoints: number, onReservation: number, onCancel: number) {
     if (modalMode === 1) {
         try {
             await axios.post(process.env.REACT_APP_API_URL + `api/loyalty-programs`, 
-            {name, discountRate, minNumberOfPoints, newPoints},
+            {name, discountRate, minNumberOfPoints, onReservation, onCancel},
             {headers: {Authorization: `Bearer ${authContext?.user?.token}`}});
             await fetchPrograms();
             setLoading(false)
@@ -71,7 +71,7 @@ function LoyaltyProgramAdminPage() {
     } else {
         try {
             await axios.put(process.env.REACT_APP_API_URL + `api/loyalty-programs/${currentProgram?.id}`, 
-            {id: currentProgram?.id, name, discountRate, minNumberOfPoints, newPoints},
+            {id: currentProgram?.id, name, discountRate, minNumberOfPoints, onReservation, onCancel},
             {headers: {Authorization: `Bearer ${authContext?.user?.token}`}});
             await fetchPrograms();
             handleCloseModal();
@@ -119,6 +119,7 @@ function LoyaltyProgramAdminPage() {
                     <th>Discount rate</th>
                     <th>Min number of points</th>
                     <th>Number of new points on each purchase</th>
+                    <th>Number of subtracted on each cancellation</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -128,7 +129,8 @@ function LoyaltyProgramAdminPage() {
                         <td>{program.name}</td>
                         <td>{program.discountRate}</td>
                         <td>{program.minNumberOfPoints}</td>
-                        <td>{program.newPoints}</td>
+                        <td>{program.onReservation}</td>
+                        <td>{program.onCancel}</td>
                         <td>
                             <Button className='btn-primary mx-2' onClick={() => openEditModal(program)}>Edit</Button>
                             <Button className='btn-danger' onClick={() => openDeleteModal(program)}>Delete</Button>

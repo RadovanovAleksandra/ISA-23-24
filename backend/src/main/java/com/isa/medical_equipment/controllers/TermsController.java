@@ -1,11 +1,10 @@
 package com.isa.medical_equipment.controllers;
 
 import com.isa.medical_equipment.dto.*;
+import com.isa.medical_equipment.entity.LoyaltyProgram;
+import com.isa.medical_equipment.entity.Penalty;
 import com.isa.medical_equipment.entity.ReservationStatusEnum;
-import com.isa.medical_equipment.repositories.CompanyRepository;
-import com.isa.medical_equipment.repositories.ReservationRepository;
-import com.isa.medical_equipment.repositories.TermsRepository;
-import com.isa.medical_equipment.repositories.UserRepository;
+import com.isa.medical_equipment.repositories.*;
 import com.isa.medical_equipment.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,8 @@ public class TermsController {
     private final TermsRepository termsRepository;
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
+    private final PenaltyRepository penaltyRepository;
+    private final LoyaltyProgramRepository loyaltyProgramRepository;
 
     @GetMapping("/pending/for-user")
     public ResponseEntity<?> getListOfSuccessfulReservations() {
@@ -46,6 +50,7 @@ public class TermsController {
         }).collect(Collectors.toList()));
     }
 
+    @Transactional
     @PostMapping("{termId}/cancel")
     public ResponseEntity<?> createIrregularTerm(@PathVariable long termId) {
         SecurityContext context = SecurityContextHolder.getContext();
@@ -80,8 +85,29 @@ public class TermsController {
 
         var reservation = term.getReservation();
         term.setReservation(null);
-        reservationRepository.delete(reservation);
         termsRepository.save(term);
+        reservationRepository.delete(reservation);
+
+        var penalty = new Penalty();
+        penalty.setUser(user);
+        penalty.setTimestamp(LocalDateTime.now());
+        penaltyRepository.save(penalty);
+
+        if (user.getLoyaltyProgram() != null) {
+            user.setPoints(user.getPoints() - user.getLoyaltyProgram().getOnCancel());
+            if (user.getPoints() < user.getLoyaltyProgram().getMinNumberOfPoints()) {
+                user.setLoyaltyProgram(null);
+                var loyaltyPrograms = loyaltyProgramRepository.findAll();
+                Collections.sort(loyaltyPrograms, Comparator.comparingInt(LoyaltyProgram::getMinNumberOfPoints).reversed());
+                for (var loyProg : loyaltyPrograms) {
+                    if (user.getPoints() > loyProg.getMinNumberOfPoints()) {
+                        user.setLoyaltyProgram(loyProg);
+                        break;
+                    }
+                }
+            }
+            userRepository.save(user);
+        }
 
         return ResponseEntity.ok().build();
     }

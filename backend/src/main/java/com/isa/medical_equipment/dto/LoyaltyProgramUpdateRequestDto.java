@@ -6,7 +6,8 @@ import lombok.Data;
 public class LoyaltyProgramUpdateRequestDto {
     long id;
     String name;
-    int newPoints;
+    int onReservation;
+    int onCancel;
     int minNumberOfPoints;
     double discountRate;
 }

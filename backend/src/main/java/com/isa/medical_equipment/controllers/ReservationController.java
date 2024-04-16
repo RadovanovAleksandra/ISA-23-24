@@ -3,10 +3,7 @@ package com.isa.medical_equipment.controllers;
 import com.isa.medical_equipment.dto.CommonResponseDto;
 import com.isa.medical_equipment.dto.ReservationRequestDto;
 import com.isa.medical_equipment.dto.ReservationResponseDto;
-import com.isa.medical_equipment.entity.Reservation;
-import com.isa.medical_equipment.entity.ReservationItem;
-import com.isa.medical_equipment.entity.ReservationStatusEnum;
-import com.isa.medical_equipment.entity.Term;
+import com.isa.medical_equipment.entity.*;
 import com.isa.medical_equipment.repositories.*;
 import com.isa.medical_equipment.security.UserDetailsImpl;
 import com.isa.medical_equipment.services.interfaces.EmailService;
@@ -19,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -33,6 +32,7 @@ public class ReservationController {
     private final EquipmentRepository equipmentRepository;
     private final PenaltyRepository penaltyRepository;
     private final CompanyRepository companyRepository;
+    private final LoyaltyProgramRepository loyaltyProgramRepository;
     private final EmailService emailService;
 
     @GetMapping
@@ -155,8 +155,10 @@ public class ReservationController {
         reservation.setUser(user);
         reservation.setTimestamp(LocalDateTime.now());
         reservation.setStatus(ReservationStatusEnum.PENDING);
+        reservation.setPrice(0);
         reservationRepository.save(reservation);
 
+        double total = 0;
         for (var item : request.getReservationItems()) {
             var reservationItem = new ReservationItem();
             reservationItem.setReservation(reservation);
@@ -167,12 +169,34 @@ public class ReservationController {
                 dto.setMessage("Equipment with id " + item.getEquipmentId() + " is not found");
                 return ResponseEntity.badRequest().body(dto);
             }
+            total+= item.getQuantity() * equipment.get().getPrice();
             reservationItem.setEquipment(equipment.get());
             reservationItemRepository.save(reservationItem);
         }
 
+        if (user.getLoyaltyProgram() != null) {
+            total = total * (100 - user.getLoyaltyProgram().getDiscountRate()) / 100;
+        }
+
+        reservation.setPrice((int)total);
+        reservationRepository.save(reservation);
+
         term.setReservation(reservation);
         termsRepository.save(term);
+
+        if (user.getLoyaltyProgram() != null) {
+            user.setPoints(user.getPoints() + user.getLoyaltyProgram().getOnReservation());
+            user.setLoyaltyProgram(null);
+            var loyaltyPrograms = loyaltyProgramRepository.findAll();
+            Collections.sort(loyaltyPrograms, Comparator.comparingInt(LoyaltyProgram::getMinNumberOfPoints).reversed());
+            for (var loyProg : loyaltyPrograms) {
+                if (user.getPoints() > loyProg.getMinNumberOfPoints()) {
+                    user.setLoyaltyProgram(loyProg);
+                    break;
+                }
+            }
+            userRepository.save(user);
+        }
 
         emailService.sendReservationCreatedEmail(reservation, user);
 

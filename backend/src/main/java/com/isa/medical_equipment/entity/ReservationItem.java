@@ -14,7 +14,7 @@ public class ReservationItem {
     @Column(name = "reservation_item_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(
             name = "reservation_id",
             referencedColumnName = "reservation_id",

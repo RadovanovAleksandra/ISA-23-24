@@ -5,7 +5,8 @@ import lombok.Data;
 @Data
 public class LoyaltyProgramCreateRequestDto {
     String name;
-    int newPoints;
+    int onReservation;
+    int onCancel;
     int minNumberOfPoints;
     double discountRate;
 }

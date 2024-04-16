@@ -6,31 +6,34 @@ interface ModalProps {
   mode: number;
   program: any;
   handleClose: () => void;
-  handleModalSubmit: (name: string, discountRate: number, minNumberOfPoints: number, newPoints: number) => void;
+  handleModalSubmit: (name: string, discountRate: number, minNumberOfPoints: number, onReservation: number, onCancel: number) => void;
 }
 
 const LoyaltyProgramModal: React.FC<ModalProps> = ({ show, mode, program, handleClose, handleModalSubmit }) => {
   const [name, setName] = useState('');
   const [discountRate, setDiscountRate] = useState(0);
   const [minNumberOfPoints, setMinNumberOfPoints] = useState(0);
-  const [newPoints, setNewPoints] = useState(0);
+  const [onReservation, setOnReservation] = useState(0);
+  const [onCancel, setOnCancel] = useState(0);
 
   useEffect(() => {
     if (program){
         setName(program.name)
         setDiscountRate(program.discountRate)
         setMinNumberOfPoints(program.minNumberOfPoints)
-        setNewPoints(program.newPoints)
+        setOnReservation(program.onReservation)
+        setOnCancel(program.onCancel)
     } else {
         setName('')
         setDiscountRate(0)
         setMinNumberOfPoints(0)
-        setNewPoints(0)
+        setOnReservation(0)
+        setOnCancel(0)
     }
   }, [program])
 
   const handleSubmit = () => {
-    handleModalSubmit(name, discountRate, minNumberOfPoints, newPoints);
+    handleModalSubmit(name, discountRate, minNumberOfPoints, onReservation, onCancel);
   };
 
   return (
@@ -70,13 +73,23 @@ const LoyaltyProgramModal: React.FC<ModalProps> = ({ show, mode, program, handle
             />
           </Form.Group>
 
-          <Form.Group controlId="newPoints">
-            <Form.Label>New points on each purchase</Form.Label>
+          <Form.Group controlId="onReservation">
+            <Form.Label>New points on each reservation</Form.Label>
             <Form.Control 
               type="number" 
               placeholder="Enter points" 
-              value={newPoints} 
-              onChange={(e) => setNewPoints(+e.target.value)} 
+              value={onReservation} 
+              onChange={(e) => setOnReservation(+e.target.value)} 
+            />
+          </Form.Group>
+
+          <Form.Group controlId="oncancel">
+            <Form.Label>Points to subtract on cancellation</Form.Label>
+            <Form.Control 
+              type="number" 
+              placeholder="Enter points" 
+              value={onCancel} 
+              onChange={(e) => setOnCancel(+e.target.value)} 
             />
           </Form.Group>
         </Form>
@@ -85,7 +98,7 @@ const LoyaltyProgramModal: React.FC<ModalProps> = ({ show, mode, program, handle
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmit} disabled={!name || !discountRate || !minNumberOfPoints || !newPoints}>
+        <Button variant="primary" onClick={handleSubmit} disabled={!name || !discountRate || !minNumberOfPoints || !onReservation}>
           Save
         </Button>
       </Modal.Footer>

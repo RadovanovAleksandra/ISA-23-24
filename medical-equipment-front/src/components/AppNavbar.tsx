@@ -31,7 +31,7 @@ function AppNavbar() {
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                        <Nav.Link as={Link} to="/home">Home</Nav.Link>
+                        <Nav.Link as={Link} to="/">Home</Nav.Link>
                         <Nav.Link as={Link} to="/companies">Companies</Nav.Link>
                         {isLoggedIn() && <Nav.Link as={Link} to="/successful-reservations/qr">QR reservations</Nav.Link>}
                         {isLoggedIn() && <Nav.Link as={Link} to="/successful-reservations">Successful reservations</Nav.Link>}

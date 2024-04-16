@@ -15,6 +15,7 @@ public class Equipment {
 
     private String name;
     private int availableQuantity;
+    private int price;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(

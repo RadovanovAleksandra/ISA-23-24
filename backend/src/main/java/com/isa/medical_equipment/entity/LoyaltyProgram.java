@@ -12,7 +12,8 @@ public class LoyaltyProgram {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     String name;
-    int newPoints;
+    int onReservation;
+    int onCancel;
     int minNumberOfPoints;
     double discountRate;
 

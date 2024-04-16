@@ -106,15 +106,18 @@ function CompanyCatalogPage() {
                     </Row>
                 </Container>}
 
-              <h1>Reservations history</h1>
+              <h1>Catalog</h1>
               <Row>
               {products.map((product:any) => (
-                <div key={product.id}>
+                <div key={product.id} className="col-4">
                   <Card style={{ width: '18rem' }}>
                     <Card.Body>
                       <Card.Title>{product.name}</Card.Title>
                       <Card.Text>
                         Available quantity: {product.availableQuantity}
+                      </Card.Text>
+                      <Card.Text>
+                        Price: {product.price}
                       </Card.Text>
                       <Card.Text>
                       <Button className="btn btn-success" disabled={product.selectedQuantity === product.availableQuantity} onClick={() => addForReservation(product)}>Add for reservation</Button>
