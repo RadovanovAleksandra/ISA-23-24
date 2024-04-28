@@ -16,12 +16,14 @@ import SuccessfulReservationsHistory from './pages/SuccessfulReservationsHistory
 import ScheduledTermsPage from './pages/ScheduledTermsPage';
 import SuccessfulReservationsHistoryQrCodes from './pages/SuccessfulReservationsHistoryQrCodes';
 import CompanyCatalogPage from './pages/CompanyCatalogPage';
+import CompanyAdminStatisticsPage from './pages/admin/CompanyAdminStatisticsPage';
 
 function App() {
   return (
       <>
       <AppNavbar />
         <Routes>
+          <Route path="/statistics" element={<CompanyAdminStatisticsPage />} />
           <Route path="/scheduled-terms" element={<ScheduledTermsPage />} />
           <Route path="/successful-reservations/qr" element={<SuccessfulReservationsHistoryQrCodes />} />
           <Route path="/successful-reservations" element={<SuccessfulReservationsHistory />} />

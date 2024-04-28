@@ -15,6 +15,10 @@ function AppNavbar() {
         return authContext?.user?.role && authContext?.user?.role === 'ADMIN';
     }
 
+    function isCompanyAdmin() {
+        return authContext?.user?.role && authContext?.user?.role === 'COMPANY_ADMIN';
+    }
+
     function logout() {
         authContext?.logout();
     }
@@ -33,6 +37,7 @@ function AppNavbar() {
                     >
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
                         <Nav.Link as={Link} to="/companies">Companies</Nav.Link>
+                        {isCompanyAdmin() && <Nav.Link as={Link} to="/statistics">Statistics</Nav.Link>}
                         {isLoggedIn() && <Nav.Link as={Link} to="/successful-reservations/qr">QR reservations</Nav.Link>}
                         {isLoggedIn() && <Nav.Link as={Link} to="/successful-reservations">Successful reservations</Nav.Link>}
                         {isLoggedIn() && <Nav.Link as={Link} to="/scheduled-terms">Scheduled terms</Nav.Link>}

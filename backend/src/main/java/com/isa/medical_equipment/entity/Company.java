@@ -20,7 +20,6 @@ public class Company {
     private String name;
     private String city;
     private String address;
-    private byte rating;
     private LocalTime workingHoursStart;
     private LocalTime workingHoursEnd;
 

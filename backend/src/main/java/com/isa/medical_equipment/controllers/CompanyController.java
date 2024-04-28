@@ -25,7 +25,7 @@ public class CompanyController {
 
     @GetMapping()
     public ResponseEntity<?> getAllCompanies() {
-        return ResponseEntity.ok(companyRepository.findAll().stream().map(x -> new CompanyResponseDto(x.getId(), x.getName(), x.getCity(), x.getAddress(), x.getRating(), x.getWorkingHoursStart(), x.getWorkingHoursEnd())).collect(Collectors.toList()));
+        return ResponseEntity.ok(companyRepository.findAll().stream().map(x -> new CompanyResponseDto(x.getId(), x.getName(), x.getCity(), x.getAddress(), x.getWorkingHoursStart(), x.getWorkingHoursEnd())).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}/equipment")

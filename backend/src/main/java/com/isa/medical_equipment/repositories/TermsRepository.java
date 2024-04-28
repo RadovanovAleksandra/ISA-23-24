@@ -12,4 +12,5 @@ import java.util.Collection;
 public interface TermsRepository extends JpaRepository<Term, Long> {
     Collection<Term> findByCompanyAndReservation(Company company, Reservation reservation);
     Collection<Term> findByCompany(Company company);
+    Collection<Term> findByCompanyAndReservationIsNotNull(Company company);
 }
