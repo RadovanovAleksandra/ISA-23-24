@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect, useContext } from 'react';
-import { Table, Container, Row, Spinner, Button } from 'react-bootstrap';
+import { Table, Container, Row, Spinner, Button, Alert } from 'react-bootstrap';
 import RateCompanyModal from '../components/modals/RateCompanyModal';
 import { AuthContext } from '../services/AuthProvider';
 
@@ -9,6 +9,8 @@ function RateCompaniesPage() {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentCompanyId, setCurrentCompanyId] = useState(0);
+  const [serverError, setServerError] = useState('');
+  const [responseSuccess, setResponseSuccess] = useState(false);
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -37,6 +39,8 @@ function RateCompaniesPage() {
 
   async function handleRateCompany(comment: string, rate:any) {
     setLoading(true);
+    setServerError('')
+    setResponseSuccess(false)
     try {
         const response = await axios.post(process.env.REACT_APP_API_URL + `api/company-rates`,{
             companyId: currentCompanyId,
@@ -45,8 +49,14 @@ function RateCompaniesPage() {
         }, 
         {headers: {Authorization: `Bearer ${authContext?.user?.token}`}});
         console.log(response.data)
-    } catch (error) {
+        setResponseSuccess(true)
+    } catch (error:any) {
         console.log(error)                
+        if (error.response.status === 400)
+            setServerError(error.response.data.message);
+        else {
+            setServerError("Server error");
+        }
     }
 
     setLoading(false);
@@ -64,6 +74,9 @@ function RateCompaniesPage() {
             </Spinner>
         </Row>
         </Container>}
+
+        {serverError && <Alert variant="danger">{serverError}</Alert>}
+        {responseSuccess && <Alert variant="success">Rate saved successfully</Alert>}
 
         <Container className='mt-3'>
             <Row>

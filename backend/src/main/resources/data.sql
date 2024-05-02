@@ -146,6 +146,30 @@ INSERT INTO public.equipments(
 
 INSERT INTO public.terms(
 	duration_in_minutes, irregular, start, admin_id, company_id, reservation_id)
+	VALUES (20, false, '2024-04-15 10:30', 2, 1, null);
+
+INSERT INTO public.terms(
+    duration_in_minutes, irregular, start, admin_id, company_id, reservation_id)
+    VALUES (20, false, '2024-04-16 10:30', 2, 1, null);
+
+INSERT INTO public.terms(
+    duration_in_minutes, irregular, start, admin_id, company_id, reservation_id)
+    VALUES (20, false, '2024-04-17 10:30', 2, 1, null);
+
+INSERT INTO public.terms(
+	duration_in_minutes, irregular, start, admin_id, company_id, reservation_id)
+	VALUES (20, false, '2024-05-15 10:30', 2, 1, null);
+
+INSERT INTO public.terms(
+    duration_in_minutes, irregular, start, admin_id, company_id, reservation_id)
+    VALUES (20, false, '2024-05-16 10:30', 2, 1, null);
+
+INSERT INTO public.terms(
+    duration_in_minutes, irregular, start, admin_id, company_id, reservation_id)
+    VALUES (20, false, '2024-05-17 10:30', 2, 1, null);
+
+INSERT INTO public.terms(
+	duration_in_minutes, irregular, start, admin_id, company_id, reservation_id)
 	VALUES (20, false, '2024-06-15 10:30', 2, 1, null);
 
 INSERT INTO public.terms(

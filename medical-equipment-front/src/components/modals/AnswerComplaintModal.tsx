@@ -39,7 +39,7 @@ const AnswerComplaintModal: React.FC<NewComplaintModalProps> = ({ show, complain
           Close
         </Button>
         <Button variant="primary" onClick={handleSubmit} disabled={!answer}>
-          Save Complaint
+          Save answer
         </Button>
       </Modal.Footer>
     </Modal>

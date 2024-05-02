@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -52,7 +53,7 @@ public class CompanyController {
         }
 
         var company = companyOpt.get();
-        var dtos = termsRepository.findByCompanyAndReservation(company, null).stream().map(x -> new TermResponseDto(x.getId(), x.getStart(), x.getDurationInMinutes()));
+        var dtos = termsRepository.findByCompanyAndReservationAndStartGreaterThanEqual(company, null, LocalDateTime.now()).stream().map(x -> new TermResponseDto(x.getId(), x.getStart(), x.getDurationInMinutes()));
         return ResponseEntity.ok(dtos);
     }
 

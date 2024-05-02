@@ -33,7 +33,7 @@ public class UsersController {
                 .distinct()
                 .toList();
 
-        var dtos = admins.stream().map(x -> new CompanyAdminForRateResponseDto(x.getId(), x.getName()));
+        var dtos = admins.stream().map(x -> new CompanyAdminForRateResponseDto(x.getId(), x.getName() + " " + x.getLastName()));
         return ResponseEntity.ok(dtos);
     }
 }

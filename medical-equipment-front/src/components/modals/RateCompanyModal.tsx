@@ -56,7 +56,7 @@ const RateCompanyModal: React.FC<RateCompanyModalProps> = ({ show, handleClose, 
           Close
         </Button>
         <Button variant="primary" onClick={handleSubmit} disabled={!selectedRate}>
-          Save Complaint
+          Save Rate
         </Button>
       </Modal.Footer>
     </Modal>

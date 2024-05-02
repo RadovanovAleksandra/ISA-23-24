@@ -60,6 +60,8 @@ public class WebSecurityConfiguration {
                 //.antMatchers("/api/complaints/for-admin").hasRole("ADMIN")
                 //.antMatchers("/api/loyalty-programs/*").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/companies").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/companies/*/equipment").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/companies/*/terms").permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());

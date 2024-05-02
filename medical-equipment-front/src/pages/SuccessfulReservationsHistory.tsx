@@ -67,7 +67,7 @@ function SuccessfulReservationsHistory() {
                         </Spinner>
                     </Row>
                 </Container>}
-          <h1>Succesful reservations history</h1>
+          <h1>Succesful handovers</h1>
           <Table striped bordered hover>
                 <thead>
                 <tr>

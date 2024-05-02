@@ -20,37 +20,31 @@ function CompanyCatalogPage() {
 
       async function fetchProducts() {
         try {
-            const response = await axios.get<any[]>(process.env.REACT_APP_API_URL + `api/companies/${id}/equipment`, 
-            {headers: {Authorization: `Bearer ${authContext?.user?.token}`}});
+            const response = await axios.get<any[]>(process.env.REACT_APP_API_URL + `api/companies/${id}/equipment`);
             setProducts(response.data.map(x => ({...x, selectedQuantity:0})));
         } catch (error) {
             console.log(error)                
         }
 
         try {
-            const response = await axios.get<any[]>(process.env.REACT_APP_API_URL + `api/companies/${id}/terms`, 
-            {headers: {Authorization: `Bearer ${authContext?.user?.token}`}});
+            const response = await axios.get<any[]>(process.env.REACT_APP_API_URL + `api/companies/${id}/terms`);
             setTermOptions(response.data);
         } catch (error) {
             console.log(error)                
         }
       }
 
-      useEffect(() => {
-        const fetchData = async () => {
+      const fetchData = async () => {
             setLoading(true);
 
-            if (!authContext?.user?.token) {
-                return;
-            }
-
             await fetchProducts();
-    
+
             setLoading(false)
         }
-    
+
+      useEffect(() => {
         fetchData();
-      }, [authContext?.user?.token]);
+      }, []);
 
       function addForReservation(product: any) {
         const matching = products.find(x => x.id === product.id);
@@ -109,7 +103,7 @@ function CompanyCatalogPage() {
               <h1>Catalog</h1>
               <Row>
               {products.map((product:any) => (
-                <div key={product.id} className="col-4">
+                <div key={product.id} className="col-4 mb-4">
                   <Card style={{ width: '18rem' }}>
                     <Card.Body>
                       <Card.Title>{product.name}</Card.Title>
@@ -120,7 +114,9 @@ function CompanyCatalogPage() {
                         Price: {product.price}
                       </Card.Text>
                       <Card.Text>
-                      <Button className="btn btn-success" disabled={product.selectedQuantity === product.availableQuantity} onClick={() => addForReservation(product)}>Add for reservation</Button>
+                        {authContext?.user?.token &&
+                            <Button className="btn btn-success" disabled={product.selectedQuantity === product.availableQuantity} onClick={() => addForReservation(product)}>Add for reservation</Button>
+                        }
                       </Card.Text>
                     </Card.Body>
                   </Card>
