@@ -7,8 +7,11 @@ import com.isa.medical_equipment.entity.*;
 import com.isa.medical_equipment.repositories.*;
 import com.isa.medical_equipment.security.UserDetailsImpl;
 import com.isa.medical_equipment.services.interfaces.EmailService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/reservations")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Reservations", description = "Controller for managing reservations")
 public class ReservationController {
     private final UserRepository userRepository;
     private final TermsRepository termsRepository;
@@ -36,6 +40,11 @@ public class ReservationController {
     private final EmailService emailService;
 
     @GetMapping
+    @Operation(summary = "Get list of reservation for specific user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+            @ApiResponse(responseCode = "400", description = "Failed to fetch data")
+    })
     public ResponseEntity<?> getListForUserByStatus(@RequestParam ReservationStatusEnum status) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -55,6 +64,11 @@ public class ReservationController {
     }
 
     @GetMapping("/successful")
+    @Operation(summary = "Get list of accepted reservations")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+            @ApiResponse(responseCode = "400", description = "Failed to fetch data")
+    })
     public ResponseEntity<?> getListOfSuccessfulReservations() {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -75,6 +89,11 @@ public class ReservationController {
 
     @Transactional
     @PostMapping
+    @Operation(summary = "Creating a reservation")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully created reservation"),
+            @ApiResponse(responseCode = "400", description = "Failed to create a reservation")
+    })
     public ResponseEntity<?> createReservation(@RequestBody ReservationRequestDto request) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();

@@ -6,6 +6,10 @@ import com.isa.medical_equipment.entity.Penalty;
 import com.isa.medical_equipment.entity.ReservationStatusEnum;
 import com.isa.medical_equipment.repositories.*;
 import com.isa.medical_equipment.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/terms")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Terms", description = "Controller for managing terms")
 public class TermsController {
 
     private final CompanyRepository companyRepository;
@@ -33,6 +38,10 @@ public class TermsController {
     private final LoyaltyProgramRepository loyaltyProgramRepository;
 
     @GetMapping("/pending/for-user")
+    @Operation(summary = "Get terms user tried to book")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Fetched data successfully"),
+    })
     public ResponseEntity<?> getListOfSuccessfulReservations() {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -52,6 +61,11 @@ public class TermsController {
 
     @Transactional
     @PostMapping("{termId}/cancel")
+    @Operation(summary = "Term cancellation")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully cancelled a term"),
+            @ApiResponse(responseCode = "400", description = "Failed to cancel a term")
+    })
     public ResponseEntity<?> createIrregularTerm(@PathVariable long termId) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();

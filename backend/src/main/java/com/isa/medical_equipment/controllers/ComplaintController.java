@@ -10,6 +10,10 @@ import com.isa.medical_equipment.repositories.ComplaintRepository;
 import com.isa.medical_equipment.repositories.ReservationRepository;
 import com.isa.medical_equipment.repositories.UserRepository;
 import com.isa.medical_equipment.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
@@ -24,6 +28,7 @@ import java.util.Collection;
 @RequestMapping("/api/complaints")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Complaints", description = "Controller for managing complaints")
 public class ComplaintController {
     private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
@@ -31,6 +36,11 @@ public class ComplaintController {
     private final ComplaintRepository complaintRepository;
 
     @PostMapping
+    @Operation(summary = "Create new complaint")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully created a complaint"),
+            @ApiResponse(responseCode = "400", description = "Failed to create a complaint")
+    })
     public ResponseEntity<?> createComplaint(@RequestBody CreateComplaintRequestDto requestBody) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -92,6 +102,11 @@ public class ComplaintController {
     }
 
         @PostMapping("answer")
+        @Operation(summary = "Answer to the complaint")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Successfully answered to the complaint"),
+                @ApiResponse(responseCode = "400", description = "Failed to answered to the complaint")
+        })
         public ResponseEntity<?> answerComplaint(@RequestBody ComplaintAnswerRequestDto requestBody) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -114,6 +129,11 @@ public class ComplaintController {
 
 
     @GetMapping(value = "/for-user")
+    @Operation(summary = "Get list of complaints for regular user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+            @ApiResponse(responseCode = "400", description = "Failed to fetch data")
+    })
     public ResponseEntity<Collection<ComplaintResponseDto>> getComplaintsForUser() {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -136,6 +156,11 @@ public class ComplaintController {
     }
 
     @GetMapping(value = "/for-admin")
+    @Operation(summary = "Get list of complaints for admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+            @ApiResponse(responseCode = "400", description = "Failed to fetch data")
+    })
     public ResponseEntity<Collection<ComplaintResponseDto>> getComplaintsForAdmin() {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();

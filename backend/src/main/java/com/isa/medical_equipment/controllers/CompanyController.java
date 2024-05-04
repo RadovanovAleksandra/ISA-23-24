@@ -3,6 +3,10 @@ package com.isa.medical_equipment.controllers;
 import com.isa.medical_equipment.dto.*;
 import com.isa.medical_equipment.repositories.*;
 import com.isa.medical_equipment.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/companies")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Companies", description = "Controller for managing companies")
 public class CompanyController {
 
     private final EquipmentRepository equipmentRepository;
@@ -25,11 +30,19 @@ public class CompanyController {
     private final ReservationRepository reservationRepository;
 
     @GetMapping()
+    @Operation(summary = "Get all companies")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+    })
     public ResponseEntity<?> getAllCompanies() {
         return ResponseEntity.ok(companyRepository.findAll().stream().map(x -> new CompanyResponseDto(x.getId(), x.getName(), x.getCity(), x.getAddress(), x.getWorkingHoursStart(), x.getWorkingHoursEnd())).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}/equipment")
+    @Operation(summary = "Get available equipment for company")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+    })
     public ResponseEntity<?> getEquipmentForCompany(@PathVariable long id) {
         var companyOpt =companyRepository.findById(id);
         if (companyOpt.isEmpty()){
@@ -44,6 +57,10 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}/terms")
+    @Operation(summary = "Get available terms for company")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+    })
     public ResponseEntity<?> getTermsForCompany(@PathVariable long id) {
         var companyOpt =companyRepository.findById(id);
         if (companyOpt.isEmpty()){
@@ -58,6 +75,10 @@ public class CompanyController {
     }
 
     @GetMapping("/for-user")
+    @Operation(summary = "Get list of companies that user can rate or write complaint")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+    })
     public ResponseEntity<?> getCompaniesWhichUserCanRate() {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();

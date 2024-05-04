@@ -8,6 +8,10 @@ import com.isa.medical_equipment.repositories.CompanyRepository;
 import com.isa.medical_equipment.repositories.ReservationRepository;
 import com.isa.medical_equipment.repositories.UserRepository;
 import com.isa.medical_equipment.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,6 +24,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/company-rates")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Company Rates", description = "Controller for managing company rates")
 public class CompanyRateController {
 
     private final UserRepository userRepository;
@@ -29,6 +34,11 @@ public class CompanyRateController {
 
 
     @PostMapping
+    @Operation(summary = "Add new rate for company")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully save a rate"),
+            @ApiResponse(responseCode = "400", description = "Failed to save a rate")
+    })
     public ResponseEntity<?> saveCompanyRate(@RequestBody CompanyRateRequestDto request) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -43,7 +53,7 @@ public class CompanyRateController {
 
         var company = companyOpt.get();
         var reservations = reservationRepository.findByUser(user);
-        if (!reservations.stream().anyMatch(x -> x.getTerm().getCompany().equals(company))) {
+        if (reservations.stream().noneMatch(x -> x.getTerm().getCompany().equals(company))) {
             var dto = new CommonResponseDto();
             dto.setMessage("You have no reservations in this company");
             return ResponseEntity.badRequest().body(dto);

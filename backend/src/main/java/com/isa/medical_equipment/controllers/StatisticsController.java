@@ -4,6 +4,10 @@ import com.isa.medical_equipment.dto.*;
 import com.isa.medical_equipment.entity.CompanyRate;
 import com.isa.medical_equipment.repositories.*;
 import com.isa.medical_equipment.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +25,20 @@ import java.util.Map;
 @RequestMapping("/api/statistics")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Statistics", description = "Controller for getting statistics data for company admins")
 public class StatisticsController {
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final CompanyRateRepository companyRateRepository;
     private final TermsRepository termsRepository;
-    private final ReservationRepository reservationRepository;
+
     @GetMapping("average-rate")
+    @Operation(summary = "Get average rate for company")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+            @ApiResponse(responseCode = "400", description = "Failed to fetch data")
+    })
     public ResponseEntity<?> getAverageRateForCompany() {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -57,6 +67,11 @@ public class StatisticsController {
     }
 
     @GetMapping("number-of-terms")
+    @Operation(summary = "Get number of terms grouped by selected time period for company")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+            @ApiResponse(responseCode = "400", description = "Failed to fetch data")
+    })
     public ResponseEntity<?> getNumberOfTerms(@RequestParam NumberOfTermsRequestParam criteria) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -220,6 +235,11 @@ public class StatisticsController {
     }
 
     @GetMapping("number-of-reservations")
+    @Operation(summary = "Get number of reservations grouped by selected time period for company")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+            @ApiResponse(responseCode = "400", description = "Failed to fetch data")
+    })
     public ResponseEntity<?> getNumberOfReservations(@RequestParam NumberOfTermsRequestParam criteria) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();
@@ -383,6 +403,11 @@ public class StatisticsController {
     }
 
     @GetMapping("total-income")
+    @Operation(summary = "Get total income by selected time period for company")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
+            @ApiResponse(responseCode = "400", description = "Failed to fetch data")
+    })
     public ResponseEntity<?> getTotalIncomeByCompany(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
         SecurityContext context = SecurityContextHolder.getContext();
         var authUser = (UserDetailsImpl) context.getAuthentication().getPrincipal();

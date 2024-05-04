@@ -6,8 +6,11 @@ import com.isa.medical_equipment.dto.ProfilePutRequestDto;
 import com.isa.medical_equipment.dto.ProfileResponseDto;
 import com.isa.medical_equipment.repositories.LoyaltyProgramRepository;
 import com.isa.medical_equipment.repositories.PenaltyRepository;
-import com.isa.medical_equipment.repositories.TermsRepository;
 import com.isa.medical_equipment.repositories.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/profiles")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Profile", description = "Controller for managing users' personal data")
 public class ProfileController {
 
     private final UserRepository userRepository;
@@ -24,6 +28,11 @@ public class ProfileController {
     private final LoyaltyProgramRepository loyaltyProgramRepository;
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get Profile data")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Fetched data successfully"),
+            @ApiResponse(responseCode = "400", description = "Profile not found")
+    })
     public ResponseEntity<?> getProfile(@PathVariable long id) {
         var userOpt =userRepository.findById(id);
         if (userOpt.isEmpty()){
@@ -47,6 +56,11 @@ public class ProfileController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update Profile data")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Updated profile successfully"),
+            @ApiResponse(responseCode = "400", description = "Profile data not updated")
+    })
     public ResponseEntity<?> putProfile(@PathVariable long id, @RequestBody ProfilePutRequestDto request) {
         var userOpt =userRepository.findById(id);
         if (userOpt.isEmpty()){
@@ -62,6 +76,11 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}/penalties")
+    @Operation(summary = "Fetch penalties for user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Fetched data successfully"),
+            @ApiResponse(responseCode = "400", description = "Failed to fetch data")
+    })
     public ResponseEntity<?> getPenalties(@PathVariable long id) {
         var userOpt =userRepository.findById(id);
         if (userOpt.isEmpty()){

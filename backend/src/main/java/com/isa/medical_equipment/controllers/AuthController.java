@@ -5,6 +5,10 @@ import com.isa.medical_equipment.dto.LoginRequestDto;
 import com.isa.medical_equipment.dto.SignUpRequestDto;
 import com.isa.medical_equipment.exceptions.ErrorType;
 import com.isa.medical_equipment.services.interfaces.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +20,15 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Auth", description = "Controller for managing authentication")
 public class AuthController {
     private final AuthService authService;
 
+    @Operation(summary = "User Authentication")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully logged in"),
+            @ApiResponse(responseCode = "400", description = "Login failed")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto requestBody) {
         try {
@@ -30,6 +40,11 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "User singing up")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully signed up"),
+            @ApiResponse(responseCode = "400", description = "Sign up failed")
+    })
     @PostMapping("/signup")
     public ResponseEntity<CommonResponseDto> signup(@RequestBody SignUpRequestDto requestBody,
                                                HttpServletRequest request) {
