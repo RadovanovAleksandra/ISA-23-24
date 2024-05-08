@@ -10,6 +10,7 @@ import com.isa.medical_equipment.repositories.ComplaintRepository;
 import com.isa.medical_equipment.repositories.ReservationRepository;
 import com.isa.medical_equipment.repositories.UserRepository;
 import com.isa.medical_equipment.security.UserDetailsImpl;
+import com.isa.medical_equipment.services.interfaces.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -34,6 +35,7 @@ public class ComplaintController {
     private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
     private final ComplaintRepository complaintRepository;
+    private final EmailService emailService;
 
     @PostMapping
     @Operation(summary = "Create new complaint")
@@ -123,6 +125,8 @@ public class ComplaintController {
         complaint.setAnswer(requestBody.getAnswer());
         complaint.setAdmin(user.get());
         complaintRepository.save(complaint);
+
+        emailService.sendComplaintAnsweredEmail(complaint.getCustomer());
 
         return ResponseEntity.ok().build();
     }

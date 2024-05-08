@@ -5,4 +5,5 @@ import com.isa.medical_equipment.entity.User;
 
 public interface EmailService {
     void sendReservationCreatedEmail(Reservation reservation, User user);
+    void sendComplaintAnsweredEmail(User user);
 }

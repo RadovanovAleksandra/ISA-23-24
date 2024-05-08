@@ -114,7 +114,7 @@ INSERT INTO public.company_admins(
 
 INSERT INTO public.company_admins(
 	company_id, user_id)
-	VALUES (2, 4);
+	VALUES (3, 4);
 
 INSERT INTO public.equipments(
 	name, company_id, available_quantity, price)

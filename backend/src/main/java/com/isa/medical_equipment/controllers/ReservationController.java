@@ -203,19 +203,22 @@ public class ReservationController {
         term.setReservation(reservation);
         termsRepository.save(term);
 
-        if (user.getLoyaltyProgram() != null) {
-            user.setPoints(user.getPoints() + user.getLoyaltyProgram().getOnReservation());
-            user.setLoyaltyProgram(null);
-            var loyaltyPrograms = loyaltyProgramRepository.findAll();
-            Collections.sort(loyaltyPrograms, Comparator.comparingInt(LoyaltyProgram::getMinNumberOfPoints).reversed());
-            for (var loyProg : loyaltyPrograms) {
-                if (user.getPoints() > loyProg.getMinNumberOfPoints()) {
-                    user.setLoyaltyProgram(loyProg);
-                    break;
-                }
-            }
-            userRepository.save(user);
+        var pointsToAdd = 1;
+        if ( user.getLoyaltyProgram() != null ) {
+            pointsToAdd = user.getLoyaltyProgram().getOnReservation();
         }
+        user.setPoints(user.getPoints() + pointsToAdd);
+        user.setLoyaltyProgram(null);
+        var loyaltyPrograms = loyaltyProgramRepository.findAll();
+        Collections.sort(loyaltyPrograms, Comparator.comparingInt(LoyaltyProgram::getMinNumberOfPoints).reversed());
+        for (var loyProg : loyaltyPrograms) {
+            if (user.getPoints() >= loyProg.getMinNumberOfPoints()) {
+                user.setLoyaltyProgram(loyProg);
+                break;
+            }
+        }
+        userRepository.save(user);
+
 
         emailService.sendReservationCreatedEmail(reservation, user);
 

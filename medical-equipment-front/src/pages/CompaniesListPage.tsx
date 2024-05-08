@@ -85,9 +85,6 @@ function CompaniesListPage() {
                     <th onClick={() => requestSort('address')}>
                     Address {sortConfig.key === 'address' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : null}
                     </th>
-                    <th onClick={() => requestSort('rating')}>
-                    Rating {sortConfig.key === 'rating' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : null}
-                    </th>
                     <th onClick={() => requestSort('wokringHoursStart')}>
                     Working hours start {sortConfig.key === 'wokringHoursStart' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : null}
                     </th>
@@ -103,7 +100,6 @@ function CompaniesListPage() {
                     <td>{company.name}</td>
                     <td>{company.city}</td>
                     <td>{company.address}</td>
-                    <td>{company.rating}</td>
                     <td>{company.workingHoursStart}</td>
                     <td>{company.workingHoursEnd}</td>
                     <td><Link className='btn btn-warning' to={`/companies/${company.id}/catalog`}>See catalog</Link></td>

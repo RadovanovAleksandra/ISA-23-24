@@ -36,7 +36,8 @@ public class BaseEmailServiceImpl implements BaseEmailService {
             helper.setSubject(email.getSubject());
             helper.setFrom(email.getFrom());
             helper.setTo(email.getTo());
-            helper.addAttachment("qr.jpg", attachment);
+            if (attachment != null)
+                helper.addAttachment("qr.jpg", attachment);
 
         };
 

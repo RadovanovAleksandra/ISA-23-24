@@ -5,6 +5,7 @@ import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.isa.medical_equipment.config.email.ComplaintAnsweredEmailContext;
 import com.isa.medical_equipment.config.email.ReservationCreatedEmailContext;
 import com.isa.medical_equipment.entity.Reservation;
 import com.isa.medical_equipment.entity.User;
@@ -39,6 +40,16 @@ public class EmailServiceImpl implements EmailService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    public void sendComplaintAnsweredEmail(User user) {
+        var emailContext = new ComplaintAnsweredEmailContext();
+        emailContext.init(user);
+        emailContext.setData(user.getName());
+        try {
+            emailService.sendEmailWithAttachment(emailContext, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

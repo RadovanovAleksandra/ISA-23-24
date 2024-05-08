@@ -73,7 +73,8 @@ function AdminComplaintPage() {
             <Table bordered hover>
                 <thead>
                 <tr>
-                    <th>Created</th>
+                    <th>Created at</th>
+                    <th>Created by</th>
                     <th>Text</th>
                     <th>Complain for</th>
                     <th>Answer</th>
@@ -83,6 +84,7 @@ function AdminComplaintPage() {
                 {complaints.map((complaint:any) => (
                     <tr key={complaint.id}>
                         <td>{new Date(complaint.timestamp).toLocaleDateString('sr-RS')} {new Date(complaint.timestamp).toLocaleTimeString('sr-RS')}</td>
+                        <td>{complaint.userName}</td>
                         <td>{complaint.text}</td>
                         <td>{complaint.companyAdminName ? complaint.companyAdminName :  complaint.companyName}</td>
                         <td>

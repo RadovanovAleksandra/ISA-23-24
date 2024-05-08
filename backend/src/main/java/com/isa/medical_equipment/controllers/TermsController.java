@@ -33,6 +33,7 @@ public class TermsController {
     private final CompanyRepository companyRepository;
     private final TermsRepository termsRepository;
     private final ReservationRepository reservationRepository;
+    private final ReservationItemRepository reservationItemRepository;
     private final UserRepository userRepository;
     private final PenaltyRepository penaltyRepository;
     private final LoyaltyProgramRepository loyaltyProgramRepository;
@@ -100,6 +101,10 @@ public class TermsController {
         var reservation = term.getReservation();
         term.setReservation(null);
         termsRepository.save(term);
+        var items = reservationItemRepository.findByReservation(reservation);
+        for( var item : items) {
+            reservationItemRepository.delete(item);
+        }
         reservationRepository.delete(reservation);
 
         var penalty = new Penalty();
