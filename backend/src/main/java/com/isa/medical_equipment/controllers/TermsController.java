@@ -38,7 +38,7 @@ public class TermsController {
     private final PenaltyRepository penaltyRepository;
     private final LoyaltyProgramRepository loyaltyProgramRepository;
 
-    @GetMapping("/pending/for-user")
+    @GetMapping("pending/for-user")
     @Operation(summary = "Get terms user tried to book")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Fetched data successfully"),

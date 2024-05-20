@@ -38,7 +38,7 @@ public class CompanyController {
         return ResponseEntity.ok(companyRepository.findAll().stream().map(x -> new CompanyResponseDto(x.getId(), x.getName(), x.getCity(), x.getAddress(), x.getWorkingHoursStart(), x.getWorkingHoursEnd())).collect(Collectors.toList()));
     }
 
-    @GetMapping("/{id}/equipment")
+    @GetMapping("{id}/equipment")
     @Operation(summary = "Get available equipment for company")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
@@ -56,7 +56,7 @@ public class CompanyController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/{id}/terms")
+    @GetMapping("{id}/terms")
     @Operation(summary = "Get available terms for company")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
@@ -74,7 +74,7 @@ public class CompanyController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/for-user")
+    @GetMapping("for-user")
     @Operation(summary = "Get list of companies that user can rate or write complaint")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully fetched data"),

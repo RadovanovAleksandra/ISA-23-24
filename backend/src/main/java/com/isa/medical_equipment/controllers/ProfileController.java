@@ -27,7 +27,7 @@ public class ProfileController {
     private final PenaltyRepository penaltyRepository;
     private final LoyaltyProgramRepository loyaltyProgramRepository;
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     @Operation(summary = "Get Profile data")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Fetched data successfully"),
@@ -55,7 +55,7 @@ public class ProfileController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     @Operation(summary = "Update Profile data")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Updated profile successfully"),
@@ -75,7 +75,7 @@ public class ProfileController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/penalties")
+    @GetMapping("{id}/penalties")
     @Operation(summary = "Fetch penalties for user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Fetched data successfully"),

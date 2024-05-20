@@ -25,7 +25,7 @@ public class UsersController {
 
     private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
-    @GetMapping("/company-admins/for-user")
+    @GetMapping("company-admins/for-user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Fetched list of admins which had interaction with user"),
     })

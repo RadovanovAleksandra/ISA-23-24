@@ -29,7 +29,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Successfully logged in"),
             @ApiResponse(responseCode = "400", description = "Login failed")
     })
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto requestBody) {
         try {
             return ResponseEntity.ok(authService.login(requestBody));
@@ -45,7 +45,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Successfully signed up"),
             @ApiResponse(responseCode = "400", description = "Sign up failed")
     })
-    @PostMapping("/signup")
+    @PostMapping("signup")
     public ResponseEntity<CommonResponseDto> signup(@RequestBody SignUpRequestDto requestBody,
                                                HttpServletRequest request) {
 

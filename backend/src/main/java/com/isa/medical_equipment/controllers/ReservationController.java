@@ -63,7 +63,7 @@ public class ReservationController {
         }).collect(Collectors.toList()));
     }
 
-    @GetMapping("/successful")
+    @GetMapping("successful")
     @Operation(summary = "Get list of accepted reservations")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully fetched data"),

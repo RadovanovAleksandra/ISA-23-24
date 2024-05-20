@@ -132,7 +132,7 @@ public class ComplaintController {
     }
 
 
-    @GetMapping(value = "/for-user")
+    @GetMapping(value = "for-user")
     @Operation(summary = "Get list of complaints for regular user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
@@ -159,7 +159,7 @@ public class ComplaintController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping(value = "/for-admin")
+    @GetMapping(value = "for-admin")
     @Operation(summary = "Get list of complaints for admin")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully fetched data"),
